@@ -14,6 +14,7 @@ function rand() {
 }
 
 app.post("/api/new/", express.json(), async (req: express.Request, res: express.Response) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const url: string = req.body.url;
   const random = rand();
   console.log(url)
@@ -30,6 +31,7 @@ app.post("/api/new/", express.json(), async (req: express.Request, res: express.
 })
 
 app.get("/api/:id", async (req: express.Request, res: express.Response) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const id: string = req.params.id;
   try {
     const url = fs.readFileSync(`./links/${id}`, "utf8");

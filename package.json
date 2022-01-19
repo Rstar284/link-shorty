@@ -1,7 +1,7 @@
 {
-  "name": "link-shortner",
+  "name": "link-shorty",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Link shortner, inspired by the people at TCD owo",
   "main": "build/index.js",
   "scripts": {
     "prebuild": "echo --- tslint -c tslint.json -p tsconfig.json --fix",

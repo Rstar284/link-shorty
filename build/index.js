@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const fs_1 = __importDefault(require("fs"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.use(body_parser_1.default.json());
 function rand() {
     return Math.random().toString(16).substr(2, 5);
@@ -28,20 +28,20 @@ app.post("/api/new/", express_1.default.json(), (req, res) => __awaiter(void 0, 
     try {
         fs_1.default.writeFile(`./links/${random}`, url, (err) => {
             if (err) {
-                console.log(err);
+                return res.status(500).send(err);
             }
         });
     }
-    catch (e) {
-        return res.status(500).send(e);
+    catch (err) {
+        return res.status(500).send(err);
     }
-    return res.json({ success: true, data: random });
+    return res.status(200).send(req.path + random);
 }));
 app.get("/api/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     try {
         const url = fs_1.default.readFileSync(`./links/${id}`, "utf8");
-        return res.redirect(url);
+        return res.redirect(301, url);
     }
     catch (e) {
         return res.status(404).send(e);

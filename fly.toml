@@ -1,0 +1,4 @@
+app = "link-shorty"
+kill_signal = "SIGTERM"
+dockerfile = "Dockerfile"
+

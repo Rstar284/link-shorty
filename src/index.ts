@@ -27,7 +27,7 @@ app.post("/api/new/", express.json(), async (req: express.Request, res: express.
   } catch (err) {
     return res.status(500).send(err);
   }
-  return res.status(200).send(`https://${req.hostname}:${port}/api/${random}`);
+  return res.status(200).send(`https://r.64-b.it:${port}/api/${random}`);
 })
 
 app.get("/api/:id", async (req: express.Request, res: express.Response) => {

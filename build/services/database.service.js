@@ -34,7 +34,7 @@ const dotenv = __importStar(require("dotenv"));
 exports.collections = {};
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
     dotenv.config();
-    const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
+    const client = new mongoDB.MongoClient(process.env.MONGO_URL);
     yield client.connect();
     const db = client.db(process.env.DB_NAME);
     const collection = db.collection(process.env.DB_COLLECTION);

@@ -25,7 +25,7 @@ app.post(
       const url = req.body.url;
       const random = rand();
       const result = await collections.links.insertOne({ url, id: random });
-      result ? res.send(`localhost:3000/${random}`) : res.sendStatus(500);
+      result ? res.send(`link.what-is.ml/${random}`) : res.sendStatus(500);
     } catch (e) {
       console.error(e);
       res.sendStatus(500);

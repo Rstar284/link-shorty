@@ -1,10 +1,7 @@
 import express from "express";
-import fs from "fs";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { ObjectId } from "mongodb";
 import { collections, connect } from "./services/database.service";
-import Links from "./models/links";
 import { randomBytes } from "crypto";
 const app: express.Application = express();
 const port = process.env.PORT || 3000;
@@ -16,6 +13,10 @@ function rand() {
   return randomBytes(2).toString("hex");
 }
 
+app.get("/", (req: express.Request, res) => {
+  res.redirect("https://what-is.ml", 301);
+})
+
 app.post(
   "/api/new/",
   express.json(),
@@ -25,7 +26,7 @@ app.post(
       const url = req.body.url;
       const random = rand();
       const result = await collections.links.insertOne({ url, id: random });
-      result ? res.send(`link.what-is.ml/${random}`) : res.sendStatus(500);
+      result ? res.send(`https://link.what-is.ml/${random}`) : res.sendStatus(500);
     } catch (e) {
       console.error(e);
       res.sendStatus(500);

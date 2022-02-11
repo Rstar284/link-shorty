@@ -13,39 +13,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const fs_1 = __importDefault(require("fs"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
+const database_service_1 = require("./services/database.service");
+const crypto_1 = require("crypto");
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 app.use(body_parser_1.default.json());
+app.use((0, cors_1.default)());
 function rand() {
-    return Math.random().toString(16).substr(2, 5);
+    return (0, crypto_1.randomBytes)(2).toString("hex");
 }
 app.post("/api/new/", express_1.default.json(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const url = req.body.url;
-    const random = rand();
-    console.log(url);
+    res.setHeader("Access-Control-Allow-Origin", "*");
     try {
-        fs_1.default.writeFile(`./links/${random}`, url, (err) => {
-            if (err) {
-                return res.status(500).send(err);
-            }
-        });
+        const url = req.body.url;
+        const random = rand();
+        const result = yield database_service_1.collections.links.insertOne({ url, id: random });
+        result ? res.send(`localhost:3000/${random}`) : res.sendStatus(500);
     }
-    catch (err) {
-        return res.status(500).send(err);
+    catch (e) {
+        console.error(e);
+        res.sendStatus(500);
     }
-    return res.status(200).send(req.path + random);
 }));
-app.get("/api/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.params.id;
+app.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    const id = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id;
     try {
-        const url = fs_1.default.readFileSync(`./links/${id}`, "utf8");
+        const url = (_b = (yield database_service_1.collections.links.findOne({ id: id }))) === null || _b === void 0 ? void 0 : _b.url;
         return res.redirect(301, url);
     }
     catch (e) {
         return res.status(404).send(e);
     }
 }));
-app.listen(port, () => { console.log(`Listening on port ${port}`); });
+(0, database_service_1.connect)().then(() => {
+    app.listen(port, () => {
+        console.log(`Listening on port ${port}`);
+    });
+}).catch((error) => {
+    console.error("Database connection failed", error);
+    process.exit();
+});
 //# sourceMappingURL=index.js.map

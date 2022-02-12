@@ -25,15 +25,18 @@ button {
     border: 1px solid #202020;
     border-radius: 0.5rem;
     box-shadow: 0 0 0.5rem #202020;
+    outline: #202020;
 }
 
 textarea {
     text-align: center;
     width: 75%;
-    margin: auto 0;
+    margin: auto;
     border: 1px solid #202020;
     border-radius: 0.5rem;
     background-color: #434c5e;
     box-shadow: 0 0 0.5rem #202020;
-    resize: none;
+    resize: both;
+    font-size: 1rem;
+    outline: #202020;
 }

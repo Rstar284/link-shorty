@@ -22,7 +22,7 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.use(body_parser_1.default.json());
 app.use((0, cors_1.default)());
-app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
+app.use("/", express_1.default.static(path_1.default.join(__dirname, "public")));
 function rand() {
     return (0, crypto_1.randomBytes)(2).toString("hex");
 }

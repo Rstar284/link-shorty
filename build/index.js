@@ -17,10 +17,12 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const database_service_1 = require("./services/database.service");
 const crypto_1 = require("crypto");
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.use(body_parser_1.default.json());
 app.use((0, cors_1.default)());
+app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 function rand() {
     return (0, crypto_1.randomBytes)(2).toString("hex");
 }
@@ -30,7 +32,9 @@ app.post("/api/new/", express_1.default.json(), (req, res) => __awaiter(void 0, 
         const url = req.body.url;
         const random = rand();
         const result = yield database_service_1.collections.links.insertOne({ url, id: random });
-        result ? res.send(`localhost:3000/${random}`) : res.sendStatus(500);
+        result
+            ? res.send(`https://link.what-is.ml/${random}`)
+            : res.sendStatus(500);
     }
     catch (e) {
         console.error(e);

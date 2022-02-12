@@ -3,19 +3,17 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { collections, connect } from "./services/database.service";
 import { randomBytes } from "crypto";
+import path from "path";
 const app: express.Application = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname, "public")));
 
 function rand() {
   return randomBytes(2).toString("hex");
 }
-
-app.get("/", (req: express.Request, res) => {
-  res.redirect("https://what-is.ml", 301);
-})
 
 app.post(
   "/api/new/",
@@ -26,7 +24,9 @@ app.post(
       const url = req.body.url;
       const random = rand();
       const result = await collections.links.insertOne({ url, id: random });
-      result ? res.send(`https://link.what-is.ml/${random}`) : res.sendStatus(500);
+      result
+        ? res.send(`https://link.what-is.ml/${random}`)
+        : res.sendStatus(500);
     } catch (e) {
       console.error(e);
       res.sendStatus(500);
